@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>To-Do List</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #9004dc, #ff81f2);
+        }
+        
+        .task {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            animation-name: fade-in;
+            animation-duration: 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        .task:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3);
+            animation-name: bounce;
+            animation-duration: 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        .task h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        
+        .task p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        
+        .task .label {
+            font-size: 12px;
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+        
+        .task .priority {
+            font-size: 12px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #fff;
+            margin-right: 5px;
+        }
+        
+        .task .priority.high {
+            background-color: #f00;
+        }
+        
+        .task .priority.medium {
+            background-color: rgb(176, 124, 4);
+            color: #000;
+        }
+        
+        .task .priority.low {
+            background-color: rgb(255, 234, 2);
+        }
+        
+        .task.remove {
+            animation-name: fade-out;
+            animation-duration: 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #3E8E41;
+        }
+        
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>To-Do List</h1>
+    <form>
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" required><br><br>
+
+        <label for="category">Category:</label>
+        <select id="category" name="category">
+			<option value="work">Work</option>
+			<option value="personal">Personal</option>
+			<option value="shopping">Shopping</option>
+			<option value="miscellaneous">Miscellaneous</option>
+		</select><br><br>
+
+        <label for="deadline">Deadline:</label>
+        <input type="date" id="deadline" name="deadline"><br><br>
+
+        <label for="priority">Priority:</label>
+        <select id="priority" name="priority">
+			<option value="high">High</option>
+			<option value="medium">Medium</option>
+			<option value="low">Low</option>
+		</select><br><br>
+
+        <label for="label">Label:</label>
+        <input type="text" id="label" name="label"><br><br>
+
+        <input type="submit" class="btn" value="Add Task">
+    </form>
+
+    <h2>Tasks:</h2>
+    <div id="tasks">
+        <!-- List of tasks will be dynamically generated here -->
+    </div>
+
+    <script>
+        // JavaScript code for adding tasks to the list
+        const form = document.querySelector('form');
+        const taskInput = document.querySelector('#task');
+        const categoryInput = document.querySelector('#category');
+        const deadlineInput = document.querySelector('#deadline');
+        const priorityInput = document.querySelector('#priority');
+        const labelInput = document.querySelector('#label');
+        const tasksDiv = document.querySelector('#tasks');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const task = taskInput.value.trim();
+            const category = categoryInput.value;
+            const deadline = deadlineInput.value;
+            const priority = priorityInput.value;
+            const label = labelInput.value.trim();
+
+            if (task === '') {
+                alert('Please enter a task.');
+                return;
+            }
+
+            const taskDiv = document.createElement('div');
+            taskDiv.classList.add('task');
+
+            const taskHeader = document.createElement('h3');
+            taskHeader.innerText = task;
+            taskDiv.appendChild(taskHeader);
+
+            const taskInfo = document.createElement('p');
+            taskInfo.innerHTML = `Category: ${category} | Deadline: ${deadline} | ${label} | ${priority}`;
+            taskDiv.appendChild(taskInfo);
+
+            tasksDiv.appendChild(taskDiv);
+
+            taskInput.value = '';
+            categoryInput.value = 'work';
+            deadlineInput.value = '';
+            priorityInput.value = 'high';
+            labelInput.value = '';
+            tasksDiv.addEventListener('click', function(event) {
+                if (event.target.classList.contains('task')) {
+                    event.target.classList.add('remove');
+                    setTimeout(function() {
+                        event.target.remove();
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
